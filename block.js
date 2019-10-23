@@ -51,7 +51,7 @@
 										className: attributes.mediaID ? 'image-button' : 'button button-large',
 										onClick: obj.open
 									},
-									! attributes.mediaID ? __( 'Upload Image', 'file-thumbnail' ) : el( 'img', {  src: attributes.mediaThumbnailURL } )
+									! attributes.mediaID ? __( 'Select media', 'file-thumbnail' ) : el( 'img', {  src: attributes.mediaThumbnailURL } )
 								);
 							}
 						} )
