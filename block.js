@@ -3,8 +3,8 @@
 	var el = element.createElement;
 	var MediaUpload = editor.MediaUpload;
     var RichText = editor.RichText;
-	blocks.registerBlockType( 'pdf-preview/pdf-preview', {
-		title: i18n.__( 'PDF preview', 'pdf-preview' ),
+	blocks.registerBlockType( 'sylletka/file-thumbnail', {
+		title: i18n.__( 'File thumbnail', 'file-thumbnail' ),
 		icon: 'index-card',
 		category: 'layout',
 		attributes: {
@@ -42,17 +42,16 @@
 			};
 			return (
 				el( 'div', { className: props.className,  },
-					el( 'div', { className: 'pdf-preview' },
+					el( 'div', { className: 'file-thumbnail' },
 						el( MediaUpload, {
 							onSelect: onSelectImage,
-							allowedTypes: ['application/pdf'],
 							value: attributes.mediaID,
 							render: function( obj ) {
 								return el( components.Button, {
 										className: attributes.mediaID ? 'image-button' : 'button button-large',
 										onClick: obj.open
 									},
-									! attributes.mediaID ? __( 'Upload Image', 'pdf-preview' ) : el( 'img', {  src: attributes.mediaThumbnailURL } )
+									! attributes.mediaID ? __( 'Upload Image', 'file-thumbnail' ) : el( 'img', {  src: attributes.mediaThumbnailURL } )
 								);
 							}
 						} )
@@ -60,7 +59,7 @@
                     el( RichText, {
 						tagName: 'div',
 						inline: true,
-						placeholder: __( 'Label', 'pdf-preview' ),
+						placeholder: __( 'Label', 'file-thumbnail' ),
 						value: attributes.mediaLabel,
 						onChange: function( value ) {
 							props.setAttributes( { mediaLabel: value } );
@@ -74,11 +73,11 @@
 			return (
 				el( 'div', { className: props.className },
 					attributes.mediaID &&
-					el( 'figure', { className: 'pdf-preview-block' },
+					el( 'figure', { className: 'file-thumbnail' },
                         el( 'a', { href: attributes.mediaURL },
                             el( 'img', { src: attributes.mediaThumbnailURL } ),
                         ),
-                        el( 'figcaption', { className: 'pdf-preview-label'}, attributes.mediaLabel),
+                        el( 'figcaption', { className: 'file-thumbnail-label'}, attributes.mediaLabel),
 					),
 				)
 			);
