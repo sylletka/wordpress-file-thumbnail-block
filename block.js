@@ -1,4 +1,4 @@
-( function( blocks, editor, i18n, element, components, _ ) {
+} )} )( function( blocks, editor, i18n, element, components, _ ) {
     var __ = i18n.__;
     var el = element.createElement;
     var MediaUpload = editor.MediaUpload;
@@ -98,7 +98,7 @@
                                     )
                                 );
                             }
-                        })
+                        } )
                     ),
                     el( RichText, {
                         tagName: 'div',
@@ -108,7 +108,7 @@
                         onChange: function( value ) {
                             props.setAttributes( { mediaLabel: value } );
                         }
-                    }),
+                    } ),
                     el( InspectorControls,
                         {}, [
                             el( RangeControl, {
@@ -133,7 +133,7 @@
                                 onChange: ( value ) => {
                                     props.setAttributes( { shadow: value } );
                                 }
-                            }),
+                            } ),
                             props.attributes.shadow ? [
                                 el( RangeControl, {
                                     label: 'Shadow horizontal offset',
@@ -203,7 +203,7 @@
                 )
             );
         }
-    });
+    } );
 } )(
     window.wp.blocks,
     window.wp.editor,
