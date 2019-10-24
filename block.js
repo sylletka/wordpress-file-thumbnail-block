@@ -1,34 +1,32 @@
 ( function( blocks, editor, i18n, element, components, _ ) {
     var __ = i18n.__;
-	var el = element.createElement;
-	var MediaUpload = editor.MediaUpload;
+    var el = element.createElement;
+    var MediaUpload = editor.MediaUpload;
     var RichText = editor.RichText;
     var InspectorControls = editor.InspectorControls;
-    var TextControl = wp.components.TextControl;
     var ColorPicker = wp.components.ColorPicker;
-    var FontSizePicker = wp.components.FontSizePicker;
     var CheckboxControl = wp.components.CheckboxControl;
     var RangeControl  = wp.components.RangeControl;
-	blocks.registerBlockType( 'sylletka/file-thumbnail', {
-		title: i18n.__( 'File thumbnail', 'file-thumbnail' ),
-		icon: 'index-card',
-		category: 'layout',
-		attributes: {
-			mediaID: {
-				type: 'number',
-			},
-			mediaURL: {
-				type: 'string',
-				source: 'attribute',
-				selector: 'a',
-				attribute: 'href',
-			},
-			mediaThumbnailURL: {
-				type: 'string',
-				source: 'attribute',
-				selector: 'img',
-				attribute: 'src',
-			},
+    blocks.registerBlockType( 'sylletka/file-thumbnail', {
+        title: i18n.__( 'File thumbnail', 'file-thumbnail' ),
+        icon: 'index-card',
+        category: 'layout',
+        attributes: {
+            mediaID: {
+                type: 'number',
+            },
+            mediaURL: {
+                type: 'string',
+                source: 'attribute',
+                selector: 'a',
+                attribute: 'href',
+            },
+            mediaThumbnailURL: {
+                type: 'string',
+                source: 'attribute',
+                selector: 'img',
+                attribute: 'src',
+            },
             mediaLabel: {
                 type: 'string',
             },
@@ -53,62 +51,64 @@
             shadowColor:{
                 type: 'string',
             },
-
-		},
+        },
         supports: {
             align: true,
             alignWide: true
         },
         edit: function( props ) {
             var attributes = props.attributes;
-			var onSelectImage = function( media ) {
-				return props.setAttributes( {
+            var onSelectImage = function( media ) {
+                return props.setAttributes( {
                     mediaID: media.id,
-					mediaURL: media.url,
+                    mediaURL: media.url,
                     mediaThumbnailURL:
-                        media.sizes ? media.sizes.thumbnail.url : media.icon,
-				} );
-			};
-			return (
-				el( 'div', { className: props.className,  },
-					el( 'div', { className: 'file-thumbnail' },
-						el( MediaUpload, {
-							onSelect: onSelectImage,
-							value: attributes.mediaID,
-							render: function( obj ) {
-								return el( components.Button, {
-										className: attributes.mediaID ? 'image-button' : 'button button-large',
-										onClick: obj.open
-									},
-									! attributes.mediaID ? __( 'Select media', 'file-thumbnail' ) : el(
-                                         'img', {
-                                               src: attributes.mediaThumbnailURL,
-                                               style: {
-                                                     borderColor:  attributes.borderColor,
-                                                     borderWidth: attributes.borderWidth + 'px',
-                                                     borderStyle: 'solid',
-                                                     boxShadow:
-                                                         attributes.shadow ?
-                                                            attributes.shadowHOffset + 'px ' +
-                                                            attributes.shadowVOffset + 'px ' +
-                                                            attributes.shadowBlur + 'px ' +
-                                                            attributes.shadowColor
-                                                            : undefined
-                                           } }
-                                     )
-								);
-							}
-						} )
-					),
+                    media.sizes ? media.sizes.thumbnail.url : media.icon,
+                } );
+            };
+            return (
+                el( 'div', { className: props.className,  },
+                    el( 'div', { className: 'file-thumbnail' },
+                        el( MediaUpload, {
+                            onSelect: onSelectImage,
+                            value: attributes.mediaID,
+                            render: function( obj ) {
+                                return el( components.Button,
+                                    {
+                                        className: attributes.mediaID ? 'image-button' : 'button button-large',
+                                        onClick: obj.open
+                                    },
+                                    ! attributes.mediaID
+                                    ? __( 'Select media', 'file-thumbnail' )
+                                    : el(
+                                        'img', {
+                                            src: attributes.mediaThumbnailURL,
+                                            style: {
+                                                borderColor:  attributes.borderColor,
+                                                borderWidth: attributes.borderWidth + 'px',
+                                                borderStyle: 'solid',
+                                                boxShadow:
+                                                attributes.shadow &&
+                                                    attributes.shadowHOffset + 'px ' +
+                                                    attributes.shadowVOffset + 'px ' +
+                                                    attributes.shadowBlur + 'px ' +
+                                                    attributes.shadowColor
+                                            }
+                                        }
+                                    )
+                                );
+                            }
+                        })
+                    ),
                     el( RichText, {
-						tagName: 'div',
-						inline: true,
-						placeholder: __( 'Label', 'file-thumbnail' ),
-						value: attributes.mediaLabel,
-						onChange: function( value ) {
-							props.setAttributes( { mediaLabel: value } );
-						},
-					} ),
+                        tagName: 'div',
+                        inline: true,
+                        placeholder: __( 'Label', 'file-thumbnail' ),
+                        value: attributes.mediaLabel,
+                        onChange: function( value ) {
+                            props.setAttributes( { mediaLabel: value } );
+                        }
+                    }),
                     el( InspectorControls,
                         {}, [
                             el( RangeControl, {
@@ -138,8 +138,8 @@
                                 el( RangeControl, {
                                     label: 'Shadow horizontal offset',
                                     value: props.attributes.shadowHOffset,
-                                    min: -10,
-                                    max: 10,
+                                    min: -25,
+                                    max: 25,
                                     onChange: ( value ) => {
                                         props.setAttributes( { shadowHOffset: value } );
                                     }
@@ -147,8 +147,8 @@
                                 el( RangeControl, {
                                     label: 'Shadow vertical offset',
                                     value: props.attributes.shadowVOffset,
-                                    min: -10,
-                                    max: 10,
+                                    min: -25,
+                                    max: 25,
                                     onChange: ( value ) => {
                                         props.setAttributes( { shadowVOffset: value } );
                                     }
@@ -157,7 +157,7 @@
                                     label: 'Shadow blur',
                                     value: props.attributes.shadowBlur,
                                     min: 0,
-                                    max: 10,
+                                    max: 25,
                                     onChange: ( value ) => {
                                         props.setAttributes( { shadowBlur: value } );
                                     }
@@ -172,40 +172,40 @@
                             ] : []
                         ]
                     )
-				)
-			);
-		},
-		save: function( props ) {
-			var attributes = props.attributes;
-			return (
-				el( 'div', { className: props.className },
-					attributes.mediaID &&
-					el( 'figure', { className: 'file-thumbnail' },
+                )
+            );
+        },
+        save: function( props ) {
+            var attributes = props.attributes;
+            return (
+                el( 'div', { className: props.className },
+                attributes.mediaID &&
+                    el( 'figure', { className: 'file-thumbnail' },
                         el( 'a', { href: attributes.mediaURL },
                             el( 'img', { src: attributes.mediaThumbnailURL, style: {
-                                  borderColor:  attributes.borderColor,
-                                  borderWidth: attributes.borderWidth + 'px',
-                                  borderStyle: 'solid',
-                                  boxShadow:
-                                      attributes.shadow ?
-                                         attributes.shadowHOffset + 'px ' +
-                                         attributes.shadowVOffset + 'px ' +
-                                         attributes.shadowBlur + 'px ' +
-                                         attributes.shadowColor
-                                         : undefined
-                        } } ),
+                                borderColor:  attributes.borderColor,
+                                borderWidth: attributes.borderWidth + 'px',
+                                borderStyle: 'solid',
+                                boxShadow:
+                                attributes.shadow &&
+                                    attributes.shadowHOffset + 'px ' +
+                                    attributes.shadowVOffset + 'px ' +
+                                    attributes.shadowBlur + 'px ' +
+                                    attributes.shadowColor
+                                } }
+                            )
                         ),
                         el( 'figcaption', { className: 'file-thumbnail-label'}, attributes.mediaLabel),
-					),
-				)
-			);
-		},
-	} );
+                    )
+                )
+            );
+        }
+    });
 } )(
-	window.wp.blocks,
-	window.wp.editor,
-	window.wp.i18n,
-	window.wp.element,
-	window.wp.components,
-	window._,
+    window.wp.blocks,
+    window.wp.editor,
+    window.wp.i18n,
+    window.wp.element,
+    window.wp.components,
+    window._,
 );
