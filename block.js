@@ -84,15 +84,15 @@
                                         'img', {
                                             src: attributes.mediaThumbnailURL,
                                             style: {
-                                                borderColor:  attributes.borderColor,
-                                                borderWidth: attributes.borderWidth + 'px',
+                                                borderColor:  attributes.borderColor || 'transparent',
+                                                borderWidth: attributes.borderWidth || '0' + 'px',
                                                 borderStyle: 'solid',
                                                 boxShadow:
                                                 attributes.shadow &&
-                                                    attributes.shadowHOffset + 'px ' +
-                                                    attributes.shadowVOffset + 'px ' +
-                                                    attributes.shadowBlur + 'px ' +
-                                                    attributes.shadowColor
+                                                    ( attributes.shadowHOffset || '0') + 'px ' +
+                                                    ( attributes.shadowVOffset || '0') + 'px ' +
+                                                    ( attributes.shadowBlur || '0') + 'px ' +
+                                                    ( attributes.shadowColor || 'transparent' )
                                             }
                                         }
                                     )
@@ -182,20 +182,23 @@
                 attributes.mediaID &&
                     el( 'figure', { className: 'file-thumbnail' },
                         el( 'a', { href: attributes.mediaURL },
-                            el( 'img', { src: attributes.mediaThumbnailURL, style: {
-                                borderColor:  attributes.borderColor,
-                                borderWidth: attributes.borderWidth + 'px',
-                                borderStyle: 'solid',
-                                boxShadow:
-                                attributes.shadow &&
-                                    attributes.shadowHOffset + 'px ' +
-                                    attributes.shadowVOffset + 'px ' +
-                                    attributes.shadowBlur + 'px ' +
-                                    attributes.shadowColor
-                                } }
+                            el( 'img', {
+                                src: attributes.mediaThumbnailURL,
+                                style: {
+                                    borderColor: attributes.borderColor || 'transparent',
+                                    borderWidth: attributes.borderWidth || '0' + 'px',
+                                    borderStyle: 'solid',
+                                    boxShadow:
+                                    attributes.shadow &&
+                                        ( attributes.shadowHOffset || '0') + 'px ' +
+                                        ( attributes.shadowVOffset || '0') + 'px ' +
+                                        ( attributes.shadowBlur || '0') + 'px ' +
+                                        ( attributes.shadowColor || 'transparent' )
+                                    }
+                                }
                             )
                         ),
-                        el( 'figcaption', { className: 'file-thumbnail-label'}, attributes.mediaLabel),
+                        el( 'figcaption', { className: 'file-thumbnail-label'}, attributes.mediaLabel ),
                     )
                 )
             );
