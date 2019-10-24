@@ -3,6 +3,12 @@
 	var el = element.createElement;
 	var MediaUpload = editor.MediaUpload;
     var RichText = editor.RichText;
+    var InspectorControls = editor.InspectorControls;
+    var TextControl = wp.components.TextControl;
+    var ColorPicker = wp.components.ColorPicker;
+    var FontSizePicker = wp.components.FontSizePicker;
+    var CheckboxControl = wp.components.CheckboxControl;
+    var RangeControl  = wp.components.RangeControl;
 	blocks.registerBlockType( 'sylletka/file-thumbnail', {
 		title: i18n.__( 'File thumbnail', 'file-thumbnail' ),
 		icon: 'index-card',
@@ -25,7 +31,29 @@
 			},
             mediaLabel: {
                 type: 'string',
-            }
+            },
+            borderColor: {
+                type: 'string',
+            },
+            borderWidth: {
+                type: 'integer',
+            },
+            shadow:{
+                type: 'boolean',
+            },
+            shadowHOffset:{
+                type: 'integer',
+            },
+            shadowVOffset:{
+                type: 'integer',
+            },
+            shadowBlur:{
+                type: 'integer',
+            },
+            shadowColor:{
+                type: 'string',
+            },
+
 		},
         supports: {
             align: true,
@@ -37,7 +65,8 @@
 				return props.setAttributes( {
                     mediaID: media.id,
 					mediaURL: media.url,
-                    mediaThumbnailURL: media.sizes.thumbnail.url,
+                    mediaThumbnailURL:
+                        media.sizes ? media.sizes.thumbnail.url : media.icon,
 				} );
 			};
 			return (
@@ -51,7 +80,22 @@
 										className: attributes.mediaID ? 'image-button' : 'button button-large',
 										onClick: obj.open
 									},
-									! attributes.mediaID ? __( 'Select media', 'file-thumbnail' ) : el( 'img', {  src: attributes.mediaThumbnailURL } )
+									! attributes.mediaID ? __( 'Select media', 'file-thumbnail' ) : el(
+                                         'img', {
+                                               src: attributes.mediaThumbnailURL,
+                                               style: {
+                                                     borderColor:  attributes.borderColor,
+                                                     borderWidth: attributes.borderWidth + 'px',
+                                                     borderStyle: 'solid',
+                                                     boxShadow:
+                                                         attributes.shadow ?
+                                                            attributes.shadowHOffset + 'px ' +
+                                                            attributes.shadowVOffset + 'px ' +
+                                                            attributes.shadowBlur + 'px ' +
+                                                            attributes.shadowColor
+                                                            : undefined
+                                           } }
+                                     )
 								);
 							}
 						} )
@@ -65,6 +109,69 @@
 							props.setAttributes( { mediaLabel: value } );
 						},
 					} ),
+                    el( InspectorControls,
+                        {}, [
+                            el( RangeControl, {
+                                label: 'Border width',
+                                value: props.attributes.borderWidth,
+                                min: 0,
+                                max: 10,
+                                onChange: ( value ) => {
+                                    props.setAttributes( { borderWidth: value } );
+                                }
+                            } ),
+                            el( ColorPicker, {
+                                label: 'Border color',
+                                value: props.attributes.borderColor,
+                                onChangeComplete: ( value ) => {
+                                    props.setAttributes( { borderColor: value.hex } );
+                                }
+                            } ),
+                            el( CheckboxControl,{
+                                label: 'Shadow',
+                                checked: props.attributes.shadow,
+                                onChange: ( value ) => {
+                                    props.setAttributes( { shadow: value } );
+                                }
+                            }),
+                            props.attributes.shadow ? [
+                                el( RangeControl, {
+                                    label: 'Shadow horizontal offset',
+                                    value: props.attributes.shadowHOffset,
+                                    min: -10,
+                                    max: 10,
+                                    onChange: ( value ) => {
+                                        props.setAttributes( { shadowHOffset: value } );
+                                    }
+                                } ),
+                                el( RangeControl, {
+                                    label: 'Shadow vertical offset',
+                                    value: props.attributes.shadowVOffset,
+                                    min: -10,
+                                    max: 10,
+                                    onChange: ( value ) => {
+                                        props.setAttributes( { shadowVOffset: value } );
+                                    }
+                                } ),
+                                el( RangeControl, {
+                                    label: 'Shadow blur',
+                                    value: props.attributes.shadowBlur,
+                                    min: 0,
+                                    max: 10,
+                                    onChange: ( value ) => {
+                                        props.setAttributes( { shadowBlur: value } );
+                                    }
+                                } ),
+                                el( ColorPicker, {
+                                    label: 'Shadow color',
+                                    value: props.attributes.shadowColor,
+                                    onChangeComplete: ( value ) => {
+                                        props.setAttributes( { shadowColor: value.hex } );
+                                    }
+                                } )
+                            ] : []
+                        ]
+                    )
 				)
 			);
 		},
@@ -75,7 +182,18 @@
 					attributes.mediaID &&
 					el( 'figure', { className: 'file-thumbnail' },
                         el( 'a', { href: attributes.mediaURL },
-                            el( 'img', { src: attributes.mediaThumbnailURL } ),
+                            el( 'img', { src: attributes.mediaThumbnailURL, style: {
+                                  borderColor:  attributes.borderColor,
+                                  borderWidth: attributes.borderWidth + 'px',
+                                  borderStyle: 'solid',
+                                  boxShadow:
+                                      attributes.shadow ?
+                                         attributes.shadowHOffset + 'px ' +
+                                         attributes.shadowVOffset + 'px ' +
+                                         attributes.shadowBlur + 'px ' +
+                                         attributes.shadowColor
+                                         : undefined
+                        } } ),
                         ),
                         el( 'figcaption', { className: 'file-thumbnail-label'}, attributes.mediaLabel),
 					),
